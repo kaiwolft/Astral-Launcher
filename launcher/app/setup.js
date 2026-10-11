@@ -28,6 +28,7 @@ function findFiles(dir, names, out = {}) {
   }
   return out;
 }
+function freeBytes(dir) { try { const st = fs.statfsSync(dir); return st.bavail * st.bsize; } catch (e) { return 0; } }
 function listTree(dir, base = dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
@@ -74,16 +75,35 @@ async function exportGame(opts, cb) {
   fs.copyFileSync(opts.prodKeys, path.join(sk, 'prod.keys'));
   if (opts.titleKeys && exists(opts.titleKeys)) fs.copyFileSync(opts.titleKeys, path.join(sk, 'title.keys'));
 
-  // 2. resolver el juego con su actualizacion
+  // 2. resolver el juego con su actualizacion. suyu-cmd no escribe nada en pantalla mientras trabaja (unos 2-3 min),
+  //    asi que el progreso se calcula con lo que va escribiendo (romfs.bin.partial / espacio libre del disco).
   const tmp = path.join(path.dirname(gameDir), '_exportando_' + Date.now());
   say('dump', 8, 'dump');
   const lines = [];
-  let pct = 8;
-  const code = await run(suyuCmd, ['--content-base', opts.base, '--content-update', opts.update, '--content-probe', '--content-dump', tmp], suyuDir, (l) => {
-    lines.push(l);
-    if (pct < 80) { pct += 0.5; say('dump', Math.round(pct), l); }
-  });
-  if (!exists(tmp)) throw new Error('suyu no pudo exportar el juego (codigo ' + code + '). ' + lines.slice(-4).join(' | '));
+  const TOTAL = 10310254332;                       // romfs_bytes de ASTRAL CHAIN 1.0.1 (lo confirma el log de suyu)
+  const free0 = freeBytes(path.dirname(gameDir));
+  let last = 0, lastChange = Date.now(), stalled = false;
+  const tick = setInterval(() => {
+    let done = 0;
+    try { done = fs.statSync(path.join(tmp, 'exefs', 'romfs.bin.partial')).size; } catch (e) {}
+    try { done = Math.max(done, fs.statSync(path.join(tmp, 'exefs', 'romfs.bin')).size); } catch (e) {}
+    const f = freeBytes(path.dirname(gameDir));
+    if (free0 && f) done = Math.max(done, free0 - f);
+    if (done > last + (8 << 20)) { last = done; lastChange = Date.now(); }
+    else if (Date.now() - lastChange > 6 * 60e3) stalled = true;
+    const pct = 10 + Math.min(70, Math.round(last / TOTAL * 70));
+    say('dump', pct, (last / 1073741824).toFixed(1) + ' / ' + (TOTAL / 1073741824).toFixed(1) + ' GB');
+  }, 1500);
+  let code;
+  try {
+    code = await run(suyuCmd, ['--content-base', opts.base, '--content-update', opts.update, '--content-probe', '--content-dump', tmp], suyuDir, (l) => { lines.push(l); say('dump', null, l); });
+  } finally { clearInterval(tick); }
+  // el log de suyu dice que paso (suyu-cmd no usa la consola)
+  try { for (const l of fs.readFileSync(path.join(suyuDir, 'user', 'log', 'suyu_log.txt'), 'utf8').split(/\r?\n/)) if (l.trim()) lines.push(l.trim()); } catch (e) {}
+  if (!exists(path.join(tmp, 'verified-data.complete'))) {
+    const why = lines.filter((l) => /<(Error|Critical)>|Failed|missing|invalid/i.test(l)).slice(-3).join(' | ') || lines.slice(-3).join(' | ');
+    throw new Error('suyu no termino de exportar el juego (codigo ' + code + (stalled ? ', sin avance por 6 min' : '') + '). ' + why);
+  }
 
   // 3. ordenar como el export JIT
   say('arrange', 82, 'arrange');

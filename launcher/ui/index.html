@@ -1463,9 +1463,11 @@ body.kbmode .gl:not(.kb){display:none} body:not(.kbmode) .gl.kb{display:none}
     if (m.type === 'setupPicked' && m.data) { SW.files[m.data.what] = m.data.file; paintSetup(); setupFocus(); }
     if (m.type === 'setupProgress' && m.data) {
       const d = m.data, sv = S.steps[d.step];
-      $('sBar').style.width = Math.max(0, Math.min(100, d.pct)) + '%';
-      $('sPst').textContent = (sv ? tr(sv[0], sv[1]) : d.step) + '  ·  ' + d.pct + '%';
-      if (d.msg && d.msg !== d.step) { const L = $('sLog'); L.textContent = (L.textContent + '\n' + d.msg).split('\n').slice(-18).join('\n').trim(); }
+      if (d.pct != null) { SW.pct = d.pct; $('sBar').style.width = Math.max(0, Math.min(100, d.pct)) + '%'; }
+      const gb = /^[\d.]+ \/ [\d.]+ GB$/.test(d.msg || '') ? d.msg : (d.step === 'dump' ? SW.gb : '');
+      if (gb) SW.gb = gb;
+      $('sPst').textContent = (sv ? tr(sv[0], sv[1]) : d.step) + '  ·  ' + (SW.pct || 0) + '%' + (gb && d.step === 'dump' ? '  ·  ' + gb : '');
+      if (d.msg && d.msg !== d.step && !/^[\d.]+ \/ [\d.]+ GB$/.test(d.msg)) { const L = $('sLog'); L.textContent = (L.textContent + '\n' + d.msg).split('\n').slice(-18).join('\n').trim(); }
     }
     if (m.type === 'setupDone') { SW.busy = false; SW.exported = true; st = m.data || st; paintHome(); loadAtlas(); setupGo(4); }
     if (m.type === 'setupError') { SW.busy = false; SW.failed = true; const e = $('sErr'); e.textContent = 'Error: ' + m.data; e.classList.add('on'); paintSetup(); setupFocus(); sfx.back(); }
