@@ -1380,20 +1380,21 @@ body.kbmode .gl:not(.kb){display:none} body:not(.kbmode) .gl.kb{display:none}
     steps: { keys: ['Copiando claves…', 'Copying keys…'], dump: ['suyu está exportando el juego…', 'suyu is exporting the game…'], arrange: ['Ordenando archivos…', 'Arranging files…'], runtime: ['Preparando el motor…', 'Preparing the engine…'], firmware: ['Copiando firmware…', 'Copying firmware…'], mods: ['Instalando parches…', 'Installing patches…'], done: ['¡Listo!', 'Done!'] }
   };
   const ST = (k) => { const v = S[k]; return v ? tr(v[0], v[1]) : ''; };
+  // pasos segun la ventana "Export Game — CPU Backend Comparison" de suyu v0.0.13
   const GUIDE = () => cfg.ui === 'en' ? [
-    'Press <b>OPEN SUYU</b>. The first time, go to <code>Tools › Install Keys</code> / <code>Install Firmware</code> and use your own files.',
-    'Add the folder where your <b>ASTRAL CHAIN</b> dump is (<code>double-click to add a new folder</code> in the game list).',
-    'Install your <b>1.0.1 update</b> with <code>File › Install Files to NAND</code>.',
-    'Right-click ASTRAL CHAIN and choose the <b>Dynarmic JIT</b> export.',
-    'As destination, choose the <code>ASTRAL CHAIN - Dynarmic JIT</code> folder inside the install folder (<b>OPEN FOLDER</b>). Wait until suyu finishes.',
-    'Close suyu and press <b>I EXPORTED IT</b>. The launcher adds the patches and the button icons by itself.'
+    'Press <b>OPEN SUYU</b> and install your own <b>keys</b> and <b>firmware</b> in suyu (the export window must show <code>Keys: Installed</code> and <code>Firmware: Installed</code>).',
+    'Open the <b>Export Game</b> window. In <code>ROM</code> press <code>Browse…</code> and choose your <b>ASTRAL CHAIN</b> base <code>.nsp</code> / <code>.xci</code>.',
+    'In <code>Update</code> press <code>Install Update File…</code> and choose your <b>1.0.1</b> update.',
+    'In <code>Output</code> choose the install folder (<b>OPEN FOLDER</b> shows it). <code>Target</code>: <b>Windows artifact bundle</b> · <code>CPU Backend</code>: <b>suyu Dynarmic JIT (Baseline)</b>.',
+    '<code>Package type</code>: choose the <b>portable</b> option (the default one reads your .nsp every time). Leave Steam unchecked: the launcher has its own shortcut.',
+    'Export and wait. You should end up with the <code>ASTRAL CHAIN - Dynarmic JIT</code> folder next to <code>launcher</code>. Close suyu and press <b>I EXPORTED IT</b>.'
   ] : [
-    'Pulsa <b>ABRIR SUYU</b>. La primera vez, ve a <code>Herramientas › Instalar claves</code> / <code>Instalar firmware</code> y usa tus propios archivos.',
-    'Agrega la carpeta donde está tu copia de <b>ASTRAL CHAIN</b> (<code>doble clic para agregar una carpeta</code> en la lista de juegos).',
-    'Instala tu <b>actualización 1.0.1</b> con <code>Archivo › Instalar archivos en NAND</code>.',
-    'Haz clic derecho en ASTRAL CHAIN y elige la exportación <b>Dynarmic JIT</b>.',
-    'Como destino, elige la carpeta <code>ASTRAL CHAIN - Dynarmic JIT</code> dentro de la carpeta de instalación (<b>ABRIR CARPETA</b>). Espera a que suyu termine.',
-    'Cierra suyu y pulsa <b>YA LO EXPORTÉ</b>. El launcher agrega los parches y los iconos de botones por su cuenta.'
+    'Pulsa <b>ABRIR SUYU</b> e instala tus propias <b>claves</b> y tu <b>firmware</b> en suyu (la ventana de exportar debe decir <code>Keys: Installed</code> y <code>Firmware: Installed</code>).',
+    'Abre la ventana <b>Export Game</b>. En <code>ROM</code> pulsa <code>Browse…</code> y elige tu <b>ASTRAL CHAIN</b> base <code>.nsp</code> / <code>.xci</code>.',
+    'En <code>Update</code> pulsa <code>Install Update File…</code> y elige tu actualización <b>1.0.1</b>.',
+    'En <code>Output</code> elige la carpeta de instalación (<b>ABRIR CARPETA</b> te la muestra). <code>Target</code>: <b>Windows artifact bundle</b> · <code>CPU Backend</code>: <b>suyu Dynarmic JIT (Baseline)</b>.',
+    '<code>Package type</code>: elige la opción <b>portátil</b> (la de por defecto lee tu .nsp cada vez). Deja Steam sin marcar: el launcher ya tiene su acceso.',
+    'Exporta y espera. Debe quedar la carpeta <code>ASTRAL CHAIN - Dynarmic JIT</code> junto a <code>launcher</code>. Cierra suyu y pulsa <b>YA LO EXPORTÉ</b>.'
   ];
   const SW = { step: 0, checks: [false, false, false], files: {}, busy: false, failed: false, from: 0 };
   const SSTEPS = ['sLegal', 'sFiles', 'sExport', 'sManual', 'sDone'];
@@ -1479,7 +1480,7 @@ body.kbmode .gl:not(.kb){display:none} body:not(.kbmode) .gl.kb{display:none}
       document.body.classList.toggle('noanim', cfg.anim === 'off');
       applyLang(); applyPersonal();
       if (st.baseAtlas) loadAtlas();
-      if (SW.rescanning) { SW.rescanning = false; if (st.needsSetup) { const e = $('sManErr'); e.textContent = tr('Todavía no encuentro el juego exportado en la carpeta «ASTRAL CHAIN - Dynarmic JIT».', 'The exported game is still not in the «ASTRAL CHAIN - Dynarmic JIT» folder.'); e.classList.add('on'); sfx.back(); } else { $('sManErr').classList.remove('on'); setupGo(4); } }
+      if (SW.rescanning) { SW.rescanning = false; if (st.needsSetup) { const e = $('sManErr'); e.textContent = tr('Todavía no encuentro el juego exportado (exefs\\romfs.bin) en «ASTRAL CHAIN - Dynarmic JIT». Revisa que el tipo de paquete sea el portátil.', 'The exported game (exefs\\romfs.bin) is still not in «ASTRAL CHAIN - Dynarmic JIT». Check that the package type is the portable one.'); e.classList.add('on'); sfx.back(); } else { $('sManErr').classList.remove('on'); setupGo(4); } }
       else if (st.needsSetup && !SW.shown) { SW.shown = true; openSetup(0); }
       else if ($('setup').classList.contains('on')) paintSetup();
     }

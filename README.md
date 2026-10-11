@@ -114,13 +114,13 @@ Space: about **13 GB** free.
 ## Créditos y licencias / Credits and licenses
 
 - **Launcher** (este repositorio / this repository): [MIT](LICENSE).
-- **suyu**: GNU GPL v3, incluido sin modificar / bundled unmodified. Código fuente / source code: ver / see [CREDITS.md](CREDITS.md).
+- **suyu** [v0.0.13](https://github.com/suyu-emu/suyu-main/releases/tag/v0.0.13): GNU GPL v3, incluido sin modificar / bundled unmodified. Código fuente / source code: [suyu-emu/suyu-main](https://github.com/suyu-emu/suyu-main) (`suyu-v0.0.13-source.tar.gz`).
 - **Electron**: MIT.
 - **Parche de 60 FPS / 60 FPS patch** y **Cutscenes Speed Fix For 60 FPS Patch**: créditos a sus autores originales de la comunidad / credit to their original community authors ([CREDITS.md](CREDITS.md)).
 - **ASTRAL CHAIN** © Nintendo / PlatinumGames. Proyecto de aficionados, sin fines de lucro y sin afiliación / Non-profit fan project, not affiliated.
 
 ## Compilar / Build
 
-El instalador se genera con GitHub Actions ([build.yml](.github/workflows/build.yml)) en `windows-latest`: descarga Electron, aplica el icono con rcedit, agrega suyu (`SUYU_ZIP_URL` o el Release `suyu-bin`) y compila con Inno Setup. Una etiqueta `v*` publica el Release.
+El instalador se genera con GitHub Actions ([build.yml](.github/workflows/build.yml)) en `windows-latest`: descarga Electron, aplica el icono con rcedit, descarga suyu v0.0.13 del release oficial (verificado con SHA-256) y compila con Inno Setup. Una etiqueta `v*` publica el Release.
 
-The installer is built by GitHub Actions ([build.yml](.github/workflows/build.yml)) on `windows-latest`: it downloads Electron, sets the icon with rcedit, adds suyu (`SUYU_ZIP_URL` or the `suyu-bin` Release) and compiles with Inno Setup. A `v*` tag publishes the Release.
+The installer is built by GitHub Actions ([build.yml](.github/workflows/build.yml)) on `windows-latest`: it downloads Electron, sets the icon with rcedit, downloads suyu v0.0.13 from the official release (SHA-256 verified) and compiles with Inno Setup. A `v*` tag publishes the Release.

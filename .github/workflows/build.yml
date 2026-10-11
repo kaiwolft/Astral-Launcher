@@ -2,9 +2,8 @@
 #  - En cada push / PR: instalador + capturas como "artifacts" de la ejecucion.
 #  - Al subir una etiqueta v* (ej. v1.0.0): ademas crea un Release con el instalador.
 #
-# suyu: el workflow descarga suyu-windows-x86_64.zip desde
-#   1) la variable del repositorio SUYU_ZIP_URL (Settings > Secrets and variables > Actions > Variables), o
-#   2) el Release con etiqueta "suyu-bin" de este mismo repositorio (asset suyu-windows-x86_64.zip).
+# suyu: no se guarda en el repositorio. Se descarga del release oficial (SUYU_TAG, verificado con SHA-256)
+# al construir el instalador. Para probar otro zip: variable del repositorio SUYU_ZIP_URL.
 name: build
 
 on:
@@ -20,6 +19,9 @@ permissions:
 env:
   ELECTRON_VERSION: 44.5.1
   RCEDIT_VERSION: 2.0.0
+  # suyu oficial: https://github.com/suyu-emu/suyu-main/releases (el mismo zip probado con el launcher)
+  SUYU_TAG: v0.0.13
+  SUYU_SHA256: 5755BD12346B20B5C81A5E66A407AF543E1F0BEB7881FE732AE4C3E73BB11920
 
 jobs:
   installer:
@@ -42,18 +44,17 @@ jobs:
           Invoke-WebRequest $e -OutFile build\dl\electron.zip
           Invoke-WebRequest "https://github.com/electron/rcedit/releases/download/v$env:RCEDIT_VERSION/rcedit-x64.exe" -OutFile build\dl\rcedit.exe
 
-      - name: Descargar suyu
+      - name: Descargar suyu (release oficial, no se guarda en el repositorio)
         shell: pwsh
         env:
-          GH_TOKEN: ${{ github.token }}
           SUYU_ZIP_URL: ${{ vars.SUYU_ZIP_URL }}
         run: |
-          if ($env:SUYU_ZIP_URL) { Invoke-WebRequest $env:SUYU_ZIP_URL -OutFile build\dl\suyu.zip }
-          else {
-            gh release download suyu-bin -R ${{ github.repository }} -p 'suyu-windows-x86_64.zip' -O build\dl\suyu.zip
-            if ($LASTEXITCODE -ne 0) { throw 'No encuentro suyu: define la variable SUYU_ZIP_URL o sube suyu-windows-x86_64.zip a un Release con etiqueta suyu-bin.' }
-          }
-          (Get-FileHash build\dl\suyu.zip -Algorithm SHA256).Hash | Tee-Object build\dl\suyu.sha256
+          $url = if ($env:SUYU_ZIP_URL) { $env:SUYU_ZIP_URL } else { "https://github.com/suyu-emu/suyu-main/releases/download/$env:SUYU_TAG/suyu-windows-x86_64.zip" }
+          Invoke-WebRequest $url -OutFile build\dl\suyu.zip
+          $h = (Get-FileHash build\dl\suyu.zip -Algorithm SHA256).Hash
+          if (-not $env:SUYU_ZIP_URL -and $h -ne $env:SUYU_SHA256) { throw "SHA-256 de suyu inesperado: $h" }
+          $h | Set-Content build\dl\suyu.sha256
+          "suyu $env:SUYU_TAG  sha256 $h"
 
       - name: Preparar archivos
         shell: pwsh
@@ -128,6 +129,6 @@ jobs:
 
           **EN:** Astral Launcher installer. **It does not include the game**, its update, keys or firmware: you need your own original copy of ASTRAL CHAIN and the 1.0.1 update, dumped by yourself from your console. Piracy is not accepted.
 
-          suyu (GPLv3) SHA-256: $(Get-Content build\dl\suyu.sha256)
+          suyu $env:SUYU_TAG (GPLv3) - https://github.com/suyu-emu/suyu-main/releases/tag/$env:SUYU_TAG - source: suyu-$env:SUYU_TAG-source.tar.gz - SHA-256: $(Get-Content build\dl\suyu.sha256)
           "@
           gh release create '${{ github.ref_name }}' $exe -R ${{ github.repository }} --title "Astral Launcher ${{ github.ref_name }}" --notes $notes

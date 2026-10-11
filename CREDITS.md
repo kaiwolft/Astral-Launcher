@@ -18,7 +18,12 @@ suyu se distribuye **sin modificar**, con su `LICENSE.txt`, la carpeta `LICENSES
 suyu is distributed **unmodified**, with its `LICENSE.txt`, `LICENSES/` folder and `THIRD-PARTY-NOTICES.txt`
 (installed in `suyu\`). Per the GPL v3, its corresponding source code is available at:
 
-- SUYU_SOURCE_URL
+- Release usado / release used: **suyu v0.0.13** — https://github.com/suyu-emu/suyu-main/releases/tag/v0.0.13
+- Código fuente / source code: `suyu-v0.0.13-source.tar.gz` y / and `suyu-v0.0.13-dependency-sources.tar` en esa misma página / on that same page.
+- Repositorio / repository: https://github.com/suyu-emu/suyu-main
+
+El instalador no modifica suyu; el repositorio de este launcher no guarda sus binarios (se descargan del release oficial al compilar).
+The installer does not modify suyu; this launcher's repository does not store its binaries (they are downloaded from the official release at build time).
 
 Si eres autor de alguno de los parches y quieres que se ajuste el crédito o que se retire, abre un *issue*.
 If you authored one of the patches and want the credit adjusted or the patch removed, open an issue.
