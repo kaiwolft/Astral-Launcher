@@ -2,6 +2,8 @@
 
 **[Español](#español) · [English](#english)**
 
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Apóyame%20%C2%B7%20Support%20me-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/dionixu838824)
+
 ![Inicio](docs/screenshots/07_home_es.png)
 
 > [!CAUTION]
@@ -116,6 +118,11 @@ Space: about **13 GB** free.
 | ![Manual guide](docs/screenshots/06_wizard_manual_en.png) | ![Controls](docs/screenshots/10_controls_en.png) |
 
 ---
+
+## Apoya el proyecto / Support the project
+
+Si te gusta este launcher y quieres apoyar mis proyectos, puedes invitarme un café en **[Ko-fi](https://ko-fi.com/dionixu838824)**. ¡Gracias! 💙
+If you enjoy this launcher and want to support my projects, you can buy me a coffee on **[Ko-fi](https://ko-fi.com/dionixu838824)**. Thank you! 💙
 
 ## Créditos y licencias / Credits and licenses
 

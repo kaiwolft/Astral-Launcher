@@ -160,6 +160,8 @@ jobs:
 
           **For now there is only a Windows version** (10/11, 64-bit).
 
+          ☕ Ko-fi: https://ko-fi.com/dionixu838824
+
           suyu $env:SUYU_TAG (GPLv3) - https://github.com/suyu-emu/suyu-main/releases/tag/$env:SUYU_TAG - source: suyu-$env:SUYU_TAG-source.tar.gz - SHA-256: $(Get-Content build\dl\suyu.sha256)
           "@
           gh release create '${{ steps.ver.outputs.tag }}' $exe -R ${{ github.repository }} --target '${{ github.sha }}' --title "Astral Launcher ${{ steps.ver.outputs.tag }}" --notes $notes
