@@ -21,6 +21,9 @@
 
 ## Español
 
+> [!NOTE]
+> **Por ahora solo hay versión para Windows** (10 y 11, 64 bits). No hay versión para Linux, macOS ni Steam Deck todavía.
+
 Launcher para jugar **ASTRAL CHAIN** en Windows con la exportación **Dynarmic JIT** de suyu, sin la interfaz del emulador:
 
 - **60 FPS** en el juego y **cinemáticas a velocidad correcta** (con su corrección de audio).
@@ -66,6 +69,9 @@ Espacio: unos **13 GB** libres.
 ---
 
 ## English
+
+> [!NOTE]
+> **For now there is only a Windows version** (10 and 11, 64-bit). There is no Linux, macOS or Steam Deck version yet.
 
 A launcher to play **ASTRAL CHAIN** on Windows using suyu's **Dynarmic JIT** export, without the emulator UI:
 

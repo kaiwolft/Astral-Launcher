@@ -140,7 +140,11 @@ jobs:
           $notes = @"
           **ES:** Instalador de Astral Launcher. **No incluye el juego**, su actualización, claves ni firmware: necesitas tu propia copia original de ASTRAL CHAIN y la actualización 1.0.1, extraídas por ti mismo de tu consola. No se acepta la piratería.
 
+          **Por ahora solo hay versión para Windows** (10/11, 64 bits).
+
           **EN:** Astral Launcher installer. **It does not include the game**, its update, keys or firmware: you need your own original copy of ASTRAL CHAIN and the 1.0.1 update, dumped by yourself from your console. Piracy is not accepted.
+
+          **For now there is only a Windows version** (10/11, 64-bit).
 
           suyu $env:SUYU_TAG (GPLv3) - https://github.com/suyu-emu/suyu-main/releases/tag/$env:SUYU_TAG - source: suyu-$env:SUYU_TAG-source.tar.gz - SHA-256: $(Get-Content build\dl\suyu.sha256)
           "@

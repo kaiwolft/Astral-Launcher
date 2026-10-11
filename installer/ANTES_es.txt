@@ -1,3 +1,5 @@
+POR AHORA SOLO HAY VERSION PARA WINDOWS (10 y 11, 64 bits).
+
 QUE NECESITAS (TODO SACADO DE TU PROPIA CONSOLA)
 
   [obligatorio]  prod.keys  - las claves de tu consola

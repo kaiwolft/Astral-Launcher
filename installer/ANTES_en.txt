@@ -1,3 +1,5 @@
+FOR NOW THERE IS ONLY A WINDOWS VERSION (10 and 11, 64-bit).
+
 WHAT YOU NEED (ALL FROM YOUR OWN CONSOLE)
 
   [required]     prod.keys - your console keys
