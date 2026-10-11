@@ -1,0 +1,21 @@
+WHAT YOU NEED (ALL FROM YOUR OWN CONSOLE)
+
+  [required]     prod.keys - your console keys
+  [required]     ASTRAL CHAIN base (.nsp or .xci, version 1.0.0) - dumped by you
+  [required]     Update 1.0.1 (.nsp) - dumped by you
+  [recommended]  Your console firmware (.zip or folder with .nca files)
+  [optional]     title.keys (only if your copy is digital)
+
+SPACE: about 13 GB free on the drive you install to (the exported game is ~12 GB).
+Pick a folder you can write to (NOT inside "Program Files").
+
+HOW IT WORKS
+  1. This installer copies the launcher, suyu and the patches.
+  2. The first time you open the launcher, the wizard appears:
+       - legal notice (you must confirm the game is yours and you dumped it yourself),
+       - you pick your files,
+       - the launcher uses suyu to export the game into the
+         "ASTRAL CHAIN - Dynarmic JIT" folder (with update 1.0.1 applied).
+  3. If the automatic export fails, the wizard has a step-by-step manual guide.
+
+Your original files are never modified or sent anywhere.

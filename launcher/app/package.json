@@ -1,0 +1,7 @@
+{
+  "name": "astral-chain-launcher",
+  "productName": "Astral Chain",
+  "version": "0.1.0",
+  "description": "Launcher de Astral Chain - Dionixu's Launcher",
+  "main": "main.js"
+}

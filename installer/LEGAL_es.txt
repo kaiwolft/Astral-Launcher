@@ -1,0 +1,44 @@
+ASTRAL LAUNCHER (Dionixu's Launcher para ASTRAL CHAIN) - AVISO LEGAL Y CONDICIONES DE USO
+
+LEE ESTO ANTES DE INSTALAR.
+
+1. NO SE ACEPTA LA PIRATERIA
+   Este proyecto no acepta, no apoya y no facilita la pirateria de ninguna forma.
+   No pidas, no compartas y no publiques enlaces a juegos, actualizaciones, claves o
+   firmware. Cualquier peticion de ese tipo se ignora y se elimina.
+
+2. ESTE INSTALADOR NO INCLUYE EL JUEGO
+   Se instala: el launcher, suyu (emulador de codigo abierto, licencia GPLv3), el parche
+   de 60 FPS, la correccion de velocidad de cinematicas y los iconos de botones de
+   Xbox / teclado dibujados para este proyecto.
+   NO se instala: ASTRAL CHAIN, su actualizacion 1.0.1, claves (prod.keys / title.keys)
+   ni firmware de Nintendo Switch.
+
+3. TU MISMO DEBES EXTRAER (DUMPEAR) TU JUEGO
+   Solo puedes usar este launcher con TU PROPIA COPIA ORIGINAL de ASTRAL CHAIN, que TU
+   MISMO extrajiste (dumpeaste) de tu cartucho o de tu cuenta, en TU PROPIA Nintendo Switch.
+   Si exportas o descomprimes el juego en la carpeta "ASTRAL CHAIN - Dynarmic JIT", es
+   porque esos archivos salen de tu propia copia original, extraida por ti.
+
+4. LA ACTUALIZACION, LAS CLAVES Y EL FIRMWARE TAMBIEN SON TU RESPONSABILIDAD
+   La actualizacion 1.0.1, las claves y el firmware debes conseguirlos TU MISMO, de forma
+   legal, desde tu propia consola. El launcher no los descarga ni los incluye.
+
+5. SIN RELACION CON NINTENDO NI PLATINUMGAMES
+   ASTRAL CHAIN es propiedad de Nintendo y PlatinumGames. Este es un proyecto de
+   aficionados, gratuito, sin fines de lucro y sin relacion con ellos. Todas las marcas
+   pertenecen a sus duenos.
+
+6. SIN GARANTIA
+   El software se ofrece "tal cual", sin garantia de ningun tipo. Usalo bajo tu propia
+   responsabilidad.
+
+7. LICENCIAS Y CREDITOS
+   - Codigo del launcher: licencia MIT.
+   - suyu: GNU GPL v3 (ver la carpeta suyu\LICENSES y LICENSE.txt). El codigo fuente de suyu
+     esta disponible publicamente (ver README del repositorio).
+   - Electron: licencia MIT.
+   - Parche de 60 FPS y "Cutscenes Speed Fix For 60 FPS Patch": creditos a sus autores
+     originales de la comunidad (ver README).
+
+Al marcar "Acepto el acuerdo" confirmas que leiste y aceptas todo lo anterior.

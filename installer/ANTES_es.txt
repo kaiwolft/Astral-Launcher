@@ -1,0 +1,21 @@
+QUE NECESITAS (TODO SACADO DE TU PROPIA CONSOLA)
+
+  [obligatorio]  prod.keys  - las claves de tu consola
+  [obligatorio]  ASTRAL CHAIN base (.nsp o .xci, version 1.0.0) - dumpeado por ti
+  [obligatorio]  Actualizacion 1.0.1 (.nsp) - dumpeada por ti
+  [recomendado]  Firmware de tu consola (.zip o carpeta con .nca)
+  [opcional]     title.keys (solo si tu copia es digital)
+
+ESPACIO: unos 13 GB libres en el disco donde instales (el juego exportado ocupa ~12 GB).
+Elige una carpeta donde tengas permiso de escritura (NO dentro de "Archivos de programa").
+
+COMO FUNCIONA
+  1. Este instalador copia el launcher, suyu y los parches.
+  2. Al abrir el launcher por primera vez aparece el asistente:
+       - aviso legal (tienes que confirmar que el juego es tuyo y lo dumpeaste tu),
+       - eliges tus archivos,
+       - el launcher usa suyu para exportar el juego a la carpeta
+         "ASTRAL CHAIN - Dynarmic JIT" (version 1.0.1 ya aplicada).
+  3. Si la exportacion automatica falla, el asistente trae una guia manual paso a paso.
+
+Tus archivos originales no se modifican ni se envian a ningun lado.

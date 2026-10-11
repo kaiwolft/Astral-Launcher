@@ -1,0 +1,133 @@
+# Construye el instalador de Astral Launcher en Windows y genera las capturas.
+#  - En cada push / PR: instalador + capturas como "artifacts" de la ejecucion.
+#  - Al subir una etiqueta v* (ej. v1.0.0): ademas crea un Release con el instalador.
+#
+# suyu: el workflow descarga suyu-windows-x86_64.zip desde
+#   1) la variable del repositorio SUYU_ZIP_URL (Settings > Secrets and variables > Actions > Variables), o
+#   2) el Release con etiqueta "suyu-bin" de este mismo repositorio (asset suyu-windows-x86_64.zip).
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  ELECTRON_VERSION: 44.5.1
+  RCEDIT_VERSION: 2.0.0
+
+jobs:
+  installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version
+        id: ver
+        shell: pwsh
+        run: |
+          $v = if ('${{ github.ref_type }}' -eq 'tag') { '${{ github.ref_name }}'.TrimStart('v') } else { '0.0.' + '${{ github.run_number }}' }
+          "version=$v" >> $env:GITHUB_OUTPUT
+
+      - name: Descargar Electron y rcedit
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build\dl | Out-Null
+          $e = "https://github.com/electron/electron/releases/download/v$env:ELECTRON_VERSION/electron-v$env:ELECTRON_VERSION-win32-x64.zip"
+          Invoke-WebRequest $e -OutFile build\dl\electron.zip
+          Invoke-WebRequest "https://github.com/electron/rcedit/releases/download/v$env:RCEDIT_VERSION/rcedit-x64.exe" -OutFile build\dl\rcedit.exe
+
+      - name: Descargar suyu
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUYU_ZIP_URL: ${{ vars.SUYU_ZIP_URL }}
+        run: |
+          if ($env:SUYU_ZIP_URL) { Invoke-WebRequest $env:SUYU_ZIP_URL -OutFile build\dl\suyu.zip }
+          else {
+            gh release download suyu-bin -R ${{ github.repository }} -p 'suyu-windows-x86_64.zip' -O build\dl\suyu.zip
+            if ($LASTEXITCODE -ne 0) { throw 'No encuentro suyu: define la variable SUYU_ZIP_URL o sube suyu-windows-x86_64.zip a un Release con etiqueta suyu-bin.' }
+          }
+          (Get-FileHash build\dl\suyu.zip -Algorithm SHA256).Hash | Tee-Object build\dl\suyu.sha256
+
+      - name: Preparar archivos
+        shell: pwsh
+        run: |
+          $st = 'build\stage'
+          Expand-Archive build\dl\electron.zip "$st\launcher" -Force
+          Remove-Item "$st\launcher\resources\default_app.asar" -Force -ErrorAction SilentlyContinue
+          Rename-Item "$st\launcher\electron.exe" 'AstralChain.exe'
+          Copy-Item launcher\app "$st\launcher\resources\app" -Recurse
+          Copy-Item launcher\ui "$st\launcher\ui" -Recurse
+          (Get-Content "$st\launcher\resources\app\package.json" -Raw) -replace '"version": "[^"]*"', '"version": "${{ steps.ver.outputs.version }}"' | Set-Content "$st\launcher\resources\app\package.json" -NoNewline
+          & build\dl\rcedit.exe "$st\launcher\AstralChain.exe" --set-icon launcher\ui\assets\icon.ico `
+            --set-version-string ProductName 'Astral Chain PC' --set-version-string FileDescription 'Astral Chain PC' `
+            --set-version-string CompanyName 'Dionixu' --set-version-string OriginalFilename 'AstralChain.exe' `
+            --set-version-string LegalCopyright 'Launcher MIT. ASTRAL CHAIN (c) Nintendo / PlatinumGames - not included.' `
+            --set-file-version '${{ steps.ver.outputs.version }}' --set-product-version '${{ steps.ver.outputs.version }}'
+          Expand-Archive build\dl\suyu.zip "$st\suyu" -Force
+          # algunos zips traen una carpeta raiz
+          $inner = Get-ChildItem "$st\suyu" -Directory | Where-Object { Test-Path (Join-Path $_.FullName 'suyu.exe') } | Select-Object -First 1
+          if (-not (Test-Path "$st\suyu\suyu.exe") -and $inner) { Get-ChildItem $inner.FullName | Move-Item -Destination "$st\suyu"; Remove-Item $inner.FullName -Recurse }
+          foreach ($f in 'suyu.exe', 'suyu-cmd.exe', 'LICENSE.txt') { if (-not (Test-Path "$st\suyu\$f")) { throw "falta $f en el zip de suyu" } }
+          Copy-Item mods "$st\mods" -Recurse
+          # seguridad: nada del juego, claves ni firmware dentro del paquete
+          $bad = Get-ChildItem $st -Recurse -File | Where-Object { $_.Extension -in '.nsp', '.xci', '.nca', '.keys' -or $_.Name -in 'romfs.bin', 'prod.keys', 'title.keys' }
+          if ($bad) { $bad.FullName; throw 'El paquete contiene archivos que no deben distribuirse' }
+          Get-ChildItem $st -Directory | ForEach-Object { '{0}  {1:N1} MB' -f $_.Name, ((Get-ChildItem $_.FullName -Recurse -File | Measure-Object Length -Sum).Sum / 1MB) }
+
+      - name: Inno Setup
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress | Out-Null }
+          & $iscc "/DAppVersion=${{ steps.ver.outputs.version }}" installer\AstralLauncher.iss
+          if ($LASTEXITCODE -ne 0) { throw 'ISCC fallo' }
+          Get-ChildItem build\out
+
+      - name: Capturas del launcher
+        shell: pwsh
+        env:
+          PW_CHANNEL: chrome
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.56.0
+          node tools\screenshots.mjs build\screenshots
+
+      - name: Capturas del instalador
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $setup = (Get-ChildItem build\out\*.exe | Select-Object -First 1).FullName
+          & tools\installer_shots.ps1 -Setup $setup -Out build\screenshots
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AstralLauncher-Setup-${{ steps.ver.outputs.version }}
+          path: build/out/*.exe
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: build/screenshots/*.png
+
+      - name: Release
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $exe = (Get-ChildItem build\out\*.exe | Select-Object -First 1).FullName
+          $notes = @"
+          **ES:** Instalador de Astral Launcher. **No incluye el juego**, su actualización, claves ni firmware: necesitas tu propia copia original de ASTRAL CHAIN y la actualización 1.0.1, extraídas por ti mismo de tu consola. No se acepta la piratería.
+
+          **EN:** Astral Launcher installer. **It does not include the game**, its update, keys or firmware: you need your own original copy of ASTRAL CHAIN and the 1.0.1 update, dumped by yourself from your console. Piracy is not accepted.
+
+          suyu (GPLv3) SHA-256: $(Get-Content build\dl\suyu.sha256)
+          "@
+          gh release create '${{ github.ref_name }}' $exe -R ${{ github.repository }} --title "Astral Launcher ${{ github.ref_name }}" --notes $notes

@@ -1,0 +1,41 @@
+ASTRAL LAUNCHER (Dionixu's Launcher for ASTRAL CHAIN) - LEGAL NOTICE AND TERMS OF USE
+
+READ THIS BEFORE INSTALLING.
+
+1. PIRACY IS NOT ACCEPTED
+   This project does not accept, support or facilitate piracy in any way.
+   Do not ask for, share or post links to games, updates, keys or firmware. Any such
+   request is ignored and removed.
+
+2. THIS INSTALLER DOES NOT INCLUDE THE GAME
+   Installed: the launcher, suyu (open-source emulator, GPLv3 license), the 60 FPS patch,
+   the cutscene speed fix and the Xbox / keyboard button icons drawn for this project.
+   NOT installed: ASTRAL CHAIN, its 1.0.1 update, keys (prod.keys / title.keys) or
+   Nintendo Switch firmware.
+
+3. YOU MUST DUMP YOUR GAME YOURSELF
+   You may only use this launcher with YOUR OWN ORIGINAL COPY of ASTRAL CHAIN, which YOU
+   dumped yourself from your cartridge or your account, on YOUR OWN Nintendo Switch.
+   If you export or extract the game into the "ASTRAL CHAIN - Dynarmic JIT" folder, it is
+   because those files come from your own original copy, dumped by you.
+
+4. THE UPDATE, THE KEYS AND THE FIRMWARE ARE ALSO YOUR RESPONSIBILITY
+   The 1.0.1 update, the keys and the firmware must be obtained BY YOU, legally, from your
+   own console. The launcher does not download or include them.
+
+5. NOT AFFILIATED WITH NINTENDO OR PLATINUMGAMES
+   ASTRAL CHAIN is owned by Nintendo and PlatinumGames. This is a free, non-profit fan
+   project with no relation to them. All trademarks belong to their owners.
+
+6. NO WARRANTY
+   The software is provided "as is", without warranty of any kind. Use it at your own risk.
+
+7. LICENSES AND CREDITS
+   - Launcher code: MIT license.
+   - suyu: GNU GPL v3 (see the suyu\LICENSES folder and LICENSE.txt). suyu's source code is
+     publicly available (see the repository README).
+   - Electron: MIT license.
+   - 60 FPS patch and "Cutscenes Speed Fix For 60 FPS Patch": credit to their original
+     community authors (see README).
+
+By selecting "I accept the agreement" you confirm you have read and accept all of the above.

@@ -1,0 +1,13 @@
+build/
+node_modules/
+*.log
+# nunca subir archivos del juego, claves ni firmware / never commit game files, keys or firmware
+*.nsp
+*.xci
+*.nca
+*.keys
+romfs.bin
+*.dtt
+*.rgba
+launcher/ui/assets/hero.jpg
+launcher/ui/assets/music.mp3
