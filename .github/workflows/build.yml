@@ -48,6 +48,7 @@ jobs:
           "tag=v$v" >> $env:GITHUB_OUTPUT
           "publish=$publish" >> $env:GITHUB_OUTPUT
           "version $v  publicar: $publish"
+          exit 0   # "gh release view" sin release deja un codigo de error que no es un fallo
 
       - name: Descargar Electron y rcedit
         shell: pwsh
