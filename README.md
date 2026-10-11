@@ -127,6 +127,6 @@ Space: about **13 GB** free.
 
 ## Compilar / Build
 
-El instalador se genera con GitHub Actions ([build.yml](.github/workflows/build.yml)) en `windows-latest`: descarga Electron, aplica el icono con rcedit, descarga suyu v0.0.13 del release oficial (verificado con SHA-256) y compila con Inno Setup. Una etiqueta `v*` publica el Release.
+El instalador se genera con GitHub Actions ([build.yml](.github/workflows/build.yml)) en `windows-latest`: descarga Electron, aplica el icono con rcedit, descarga suyu v0.0.13 del release oficial (verificado con SHA-256) y compila con Inno Setup. Al subir el archivo `VERSION` con una versión nueva (o una etiqueta `v*`) se publica el Release.
 
-The installer is built by GitHub Actions ([build.yml](.github/workflows/build.yml)) on `windows-latest`: it downloads Electron, sets the icon with rcedit, downloads suyu v0.0.13 from the official release (SHA-256 verified) and compiles with Inno Setup. A `v*` tag publishes the Release.
+The installer is built by GitHub Actions ([build.yml](.github/workflows/build.yml)) on `windows-latest`: it downloads Electron, sets the icon with rcedit, downloads suyu v0.0.13 from the official release (SHA-256 verified) and compiles with Inno Setup. Pushing a new version in the `VERSION` file (or a `v*` tag) publishes the Release.

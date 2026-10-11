@@ -1,6 +1,7 @@
 # Construye el instalador de Astral Launcher en Windows y genera las capturas.
 #  - En cada push / PR: instalador + capturas como "artifacts" de la ejecucion.
-#  - Al subir una etiqueta v* (ej. v1.0.0): ademas crea un Release con el instalador.
+#  - Publicar: poner la version en el archivo VERSION (ej. 1.0.0) y subirlo a main. Si todavia no existe el
+#    Release v<VERSION>, se crea (etiqueta incluida) con el instalador. Una etiqueta v* subida a mano tambien publica.
 #
 # suyu: no se guarda en el repositorio. Se descarga del release oficial (SUYU_TAG, verificado con SHA-256)
 # al construir el instalador. Para probar otro zip: variable del repositorio SUYU_ZIP_URL.
@@ -32,9 +33,21 @@ jobs:
       - name: Version
         id: ver
         shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          $v = if ('${{ github.ref_type }}' -eq 'tag') { '${{ github.ref_name }}'.TrimStart('v') } else { '0.0.' + '${{ github.run_number }}' }
+          $base = (Get-Content VERSION -ErrorAction SilentlyContinue | Select-Object -First 1)
+          if ($base) { $base = $base.Trim() }
+          $publish = 'false'
+          if ('${{ github.ref_type }}' -eq 'tag') { $v = '${{ github.ref_name }}'.TrimStart('v'); $publish = 'true' }
+          elseif ($base -and '${{ github.event_name }}' -eq 'push' -and '${{ github.ref }}' -eq 'refs/heads/main') {
+            gh release view "v$base" -R ${{ github.repository }} *> $null
+            if ($LASTEXITCODE -ne 0) { $v = $base; $publish = 'true' } else { $v = "$base.${{ github.run_number }}" }
+          } else { $v = if ($base) { "$base.${{ github.run_number }}" } else { '0.0.${{ github.run_number }}' } }
           "version=$v" >> $env:GITHUB_OUTPUT
+          "tag=v$v" >> $env:GITHUB_OUTPUT
+          "publish=$publish" >> $env:GITHUB_OUTPUT
+          "version $v  publicar: $publish"
 
       - name: Descargar Electron y rcedit
         shell: pwsh
@@ -131,7 +144,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { git commit -m 'Capturas generadas en Windows [skip ci]'; git push }
 
       - name: Release
-        if: github.ref_type == 'tag'
+        if: steps.ver.outputs.publish == 'true'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
@@ -148,4 +161,4 @@ jobs:
 
           suyu $env:SUYU_TAG (GPLv3) - https://github.com/suyu-emu/suyu-main/releases/tag/$env:SUYU_TAG - source: suyu-$env:SUYU_TAG-source.tar.gz - SHA-256: $(Get-Content build\dl\suyu.sha256)
           "@
-          gh release create '${{ github.ref_name }}' $exe -R ${{ github.repository }} --title "Astral Launcher ${{ github.ref_name }}" --notes $notes
+          gh release create '${{ steps.ver.outputs.tag }}' $exe -R ${{ github.repository }} --target '${{ github.sha }}' --title "Astral Launcher ${{ steps.ver.outputs.tag }}" --notes $notes
