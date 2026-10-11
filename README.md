@@ -2,7 +2,7 @@
 
 **[Español](#español) · [English](#english)**
 
-[![Ko-fi](https://img.shields.io/badge/Ko--fi-Apóyame%20%C2%B7%20Support%20me-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/dionixu838824)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Ap%C3%B3yame%20%C2%B7%20Support%20me-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/dionixu838824)
 
 ![Inicio](docs/screenshots/07_home_es.png)
 
