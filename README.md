@@ -61,6 +61,9 @@ Espacio: unos **13 GB** libres.
 
 **Personalizar:** en *Ajustes › Launcher › Carpeta personal* puedes poner tu propio `hero.jpg` (fondo, 1600×760) y `music.mp3` (música del menú). El repositorio no incluye arte ni música del juego.
 
+### Agregar a Steam (opcional, Windows)
+En la carpeta [`steam/`](steam/) está **`AGREGAR_A_STEAM.bat`**: copia `AGREGAR_A_STEAM.bat`, `AGREGAR_A_STEAM.ps1` y la carpeta `arte` dentro de la carpeta del juego y haz doble clic. Agrega el juego a Steam como *juego que no es de Steam* con portada, fondo, logo e icono, para **cualquier usuario de Steam** del PC (si no encuentra el juego, te deja elegir el `.exe`). Si ya estaba agregado solo lo actualiza, sin perder tu tiempo de juego. Si el mando no responde: *clic derecho al juego → Propiedades → Mando → Desactivar Steam Input*.
+
 ### Capturas
 
 | | |
@@ -109,6 +112,9 @@ Space: about **13 GB** free.
 4. Play! The 60 FPS and cutscene patches and the icons are applied automatically at launch.
 
 **Customize:** in *Settings › Launcher › Personal folder* you can drop your own `hero.jpg` (background, 1600×760) and `music.mp3` (menu music). The repository ships no game art or music.
+
+### Add to Steam (optional, Windows)
+The [`steam/`](steam/) folder contains **`AGREGAR_A_STEAM.bat`**: copy `AGREGAR_A_STEAM.bat`, `AGREGAR_A_STEAM.ps1` and the `arte` folder into the game folder and double-click it. It adds the game to Steam as a *non-Steam game* with cover, background, logo and icon, for **any Steam account** on the PC (if it cannot find the game it lets you pick the `.exe`). If it was already added it is only updated, keeping your play time. If the controller does not respond: *right-click the game → Properties → Controller → Disable Steam Input*.
 
 ### Screenshots
 
