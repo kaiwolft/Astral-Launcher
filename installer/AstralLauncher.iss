@@ -77,6 +77,11 @@ Source: "LEGAL_es.txt"; DestDir: "{app}\LEGAL"; DestName: "AVISO_LEGAL.txt"
 Source: "LEGAL_en.txt"; DestDir: "{app}\LEGAL"; DestName: "LEGAL_NOTICE.txt"
 Source: "..\LICENSE"; DestDir: "{app}\LEGAL"; DestName: "LICENSE_launcher_MIT.txt"
 Source: "..\CREDITS.md"; DestDir: "{app}\LEGAL"; DestName: "CREDITOS_CREDITS.md"
+; Steam: AGREGAR_A_STEAM.bat en la carpeta del juego (agrega el juego a Steam con su arte)
+Source: "..\steam\AGREGAR_A_STEAM.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\steam\AGREGAR_A_STEAM.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\steam\LEEME - README.txt"; DestDir: "{app}"; DestName: "AGREGAR_A_STEAM - LEEME.txt"; Flags: ignoreversion
+Source: "..\steam\arte\*"; DestDir: "{app}\steam"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\launcher\AstralChain.exe"; WorkingDir: "{app}\launcher"
